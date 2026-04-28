@@ -49,10 +49,11 @@ async function loadVolunteers() {
       return;
     }
 
+    // Add staggered animation delay
     el.innerHTML = volunteers
       .map(
-        (v) => `
-      <div class="vol-item">
+        (v, index) => `
+      <div class="vol-item" style="animation-delay: ${index * 0.1}s">
         <div class="vol-avatar">${initials(v.name)}</div>
         <div>
           <div class="vol-name">${v.name}</div>
@@ -138,12 +139,15 @@ function showResult(data) {
   if (!card || !content) return;
 
   card.classList.remove("hidden");
+  card.classList.add("success-animation");
 
   // Check if we have a match
   if (!data.ai_match || data.ai_match === "No suitable volunteer found") {
     content.innerHTML = `
-      <div style="padding:1rem;text-align:center;color:rgba(241,245,249,0.7)">
-        😔 No matching volunteer found for skill "${data.task.skill}".
+      <div style="padding:2rem;text-align:center;color:var(--text-muted)">
+        <div style="font-size:3rem;margin-bottom:1rem">😔</div>
+        <div style="font-size:1.1rem;font-weight:600;margin-bottom:0.5rem">No Match Found</div>
+        <div style="font-size:0.9rem">No matching volunteer found for skill "${data.task.skill}".</div>
       </div>
     `;
     return;
@@ -155,7 +159,7 @@ function showResult(data) {
   content.innerHTML = `
     <div class="result-volunteer">
       <div class="result-avatar">${initials(volunteerName)}</div>
-      <div>
+      <div style="flex:1">
         <div class="result-name">${volunteerName}</div>
         <div class="result-meta">
           ✅ Best match for: ${data.task.title || data.task.skill}
@@ -163,17 +167,19 @@ function showResult(data) {
       </div>
     </div>
     <div class="result-reason">
-      🤖 AI selected ${volunteerName} as the best match for this task based on skill, location, and availability.
+      🤖 AI selected <strong>${volunteerName}</strong> as the best match for this task based on skill, location, and availability.
     </div>
     <div class="result-method">
-      Task: <strong>${data.task.skill}</strong> | Location: <strong>${
+      <strong>Task:</strong> ${data.task.skill} | <strong>Location:</strong> ${
     data.task.location || "Any"
-  }</strong> | Urgency: <strong>${data.task.urgency}</strong>
+  } | <strong>Urgency:</strong> ${data.task.urgency}
     </div>
   `;
 
-  // Scroll to result
-  card.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  // Scroll to result with smooth animation
+  setTimeout(() => {
+    card.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, 100);
 }
 
 // ── Load Assignments ──────────────────────────────────────────────────
@@ -192,12 +198,12 @@ async function loadAssignments() {
       return;
     }
 
-    // Show newest first
+    // Show newest first with staggered animation
     el.innerHTML = [...list]
       .reverse()
       .map(
-        (a) => `
-      <div class="history-item">
+        (a, index) => `
+      <div class="history-item" style="animation-delay: ${index * 0.05}s">
         <div class="history-task">📋 ${a.task.title || a.task.skill}</div>
         <div class="history-vol">👤 ${a.ai_match}</div>
         <div class="history-time">${new Date(
