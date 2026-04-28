@@ -1,0 +1,25 @@
+# --- General ---
+.DS_Store
+.env
+.env.local
+*.log
+
+# --- Backend (Node/Express/Python) ---
+backend/node_modules/
+backend/dist/
+backend/build/
+backend/.venv/
+backend/venv/
+backend/__pycache__/
+backend/*.db
+
+# --- Frontend (React/Vue/Angular/Next) ---
+frontend/node_modules/
+frontend/.next/
+frontend/dist/
+frontend/build/
+frontend/.cache/
+
+# --- IDE/Tools ---
+.vscode/
+.idea/
